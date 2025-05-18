@@ -164,6 +164,11 @@ const StaffManagement: React.FC = () => {
                         {gate.name}
                       </SelectItem>
                     ))}
+                    {mockTollGates.length === 0 && (
+                      <SelectItem value="no-gates" disabled>
+                        No toll gates available
+                      </SelectItem>
+                    )}
                   </SelectContent>
                 </Select>
               </div>
@@ -284,8 +289,14 @@ const StaffManagement: React.FC = () => {
                   })
                 ) : (
                   <tr>
-                    <td colSpan={7} className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
-                      No staff members found matching your search.
+                    <td colSpan={7} className="px-6 py-10 whitespace-nowrap text-sm text-gray-500 text-center">
+                      <div className="flex flex-col items-center justify-center py-4">
+                        <Users className="h-10 w-10 text-gray-300 mb-2" />
+                        <p className="text-base font-medium text-gray-600">No staff members found</p>
+                        <p className="text-gray-500 mt-1">
+                          Add staff members or connect to a database
+                        </p>
+                      </div>
                     </td>
                   </tr>
                 )}

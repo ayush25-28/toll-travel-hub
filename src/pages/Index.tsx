@@ -64,22 +64,22 @@ const Index: React.FC = () => {
               title="Active Toll Gates" 
               value={activeTollGates}
               icon={<MapPin size={24} />}
-              change="5% more than last month"
-              trend="up"
+              change="Connect database for live data"
+              trend="neutral"
             />
             <StatsCard 
               title="Daily Transactions" 
-              value="5,240"
+              value="--"
               icon={<TicketIcon size={24} />}
-              change="3% more than yesterday"
-              trend="up"
+              change="Connect database for live data"
+              trend="neutral"
             />
             <StatsCard 
               title="Registered Users" 
-              value="29,891"
+              value="--"
               icon={<User size={24} />}
-              change="12% growth this month"
-              trend="up"
+              change="Connect database for live data"
+              trend="neutral"
             />
           </div>
         </div>

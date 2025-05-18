@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { TollGate, mockTollGates, mockCustomers, TollTicket, ticketStore } from '@/data/mockData';
 import { useToast } from '@/hooks/use-toast';
+import { AlertTriangle } from 'lucide-react';
 
 const BookingPage: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -94,107 +95,120 @@ const BookingPage: React.FC = () => {
           </p>
         </div>
 
-        <div className="max-w-2xl mx-auto">
+        {mockTollGates.length === 0 ? (
           <Card>
-            <CardHeader className="bg-tollBlue-50">
-              <CardTitle className="text-tollBlue-800">Ticket Booking Form</CardTitle>
-            </CardHeader>
-            <CardContent className="pt-6">
-              <form onSubmit={handleSubmit}>
-                <div className="space-y-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="toll-gate">Select Toll Gate</Label>
-                    <Select
-                      value={selectedToll?.id || ''}
-                      onValueChange={(value) => {
-                        const toll = mockTollGates.find(gate => gate.id === value);
-                        setSelectedToll(toll || null);
-                      }}
-                    >
-                      <SelectTrigger id="toll-gate" className="w-full">
-                        <SelectValue placeholder="Select a toll gate" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {mockTollGates.filter(gate => gate.isActive).map(gate => (
-                          <SelectItem key={gate.id} value={gate.id}>
-                            {gate.name} - {gate.location.city}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="vehicle-type">Vehicle Type</Label>
-                    <Select
-                      value={vehicleType}
-                      onValueChange={(value: 'two-wheeler' | 'car' | 'bus' | 'truck') => setVehicleType(value)}
-                    >
-                      <SelectTrigger id="vehicle-type" className="w-full">
-                        <SelectValue placeholder="Select vehicle type" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="two-wheeler">Two Wheeler</SelectItem>
-                        <SelectItem value="car">Car</SelectItem>
-                        <SelectItem value="bus">Bus</SelectItem>
-                        <SelectItem value="truck">Truck</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="vehicle-number">Vehicle Number</Label>
-                    <Input 
-                      id="vehicle-number"
-                      value={vehicleNumber}
-                      onChange={(e) => setVehicleNumber(e.target.value)}
-                      placeholder="Enter vehicle registration number"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="customer-name">Your Name</Label>
-                    <Input 
-                      id="customer-name"
-                      value={customerName}
-                      onChange={(e) => setCustomerName(e.target.value)}
-                      placeholder="Enter your name"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="customer-phone">Phone Number</Label>
-                    <Input 
-                      id="customer-phone"
-                      value={customerPhone}
-                      onChange={(e) => setCustomerPhone(e.target.value)}
-                      placeholder="Enter your phone number"
-                    />
-                  </div>
-
-                  {selectedToll && (
-                    <div className="bg-gray-50 p-4 rounded-lg">
-                      <div className="flex justify-between items-center">
-                        <span className="text-gray-600">Price:</span>
-                        <span className="text-xl font-semibold text-gray-900">${ticketPrice}</span>
-                      </div>
-                    </div>
-                  )}
-                </div>
-                
-                <div className="mt-8">
-                  <Button 
-                    type="submit" 
-                    className="w-full bg-tollBlue-500 hover:bg-tollBlue-600" 
-                    disabled={isLoading || !selectedToll}
-                  >
-                    {isLoading ? 'Processing...' : 'Book Ticket'}
-                  </Button>
-                </div>
-              </form>
+            <CardContent className="flex flex-col items-center justify-center py-12 text-center">
+              <AlertTriangle className="h-16 w-16 text-yellow-400 mb-4" />
+              <h3 className="text-xl font-medium text-gray-600 mb-2">No Toll Gates Available</h3>
+              <p className="text-gray-500 max-w-md">
+                There are currently no toll gates in the system. Once the database is connected, 
+                you will be able to book tickets for available toll gates.
+              </p>
             </CardContent>
           </Card>
-        </div>
+        ) : (
+          <div className="max-w-2xl mx-auto">
+            <Card>
+              <CardHeader className="bg-tollBlue-50">
+                <CardTitle className="text-tollBlue-800">Ticket Booking Form</CardTitle>
+              </CardHeader>
+              <CardContent className="pt-6">
+                <form onSubmit={handleSubmit}>
+                  <div className="space-y-6">
+                    <div className="space-y-2">
+                      <Label htmlFor="toll-gate">Select Toll Gate</Label>
+                      <Select
+                        value={selectedToll?.id || ''}
+                        onValueChange={(value) => {
+                          const toll = mockTollGates.find(gate => gate.id === value);
+                          setSelectedToll(toll || null);
+                        }}
+                      >
+                        <SelectTrigger id="toll-gate" className="w-full">
+                          <SelectValue placeholder="Select a toll gate" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {mockTollGates.filter(gate => gate.isActive).map(gate => (
+                            <SelectItem key={gate.id} value={gate.id}>
+                              {gate.name} - {gate.location.city}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="vehicle-type">Vehicle Type</Label>
+                      <Select
+                        value={vehicleType}
+                        onValueChange={(value: 'two-wheeler' | 'car' | 'bus' | 'truck') => setVehicleType(value)}
+                      >
+                        <SelectTrigger id="vehicle-type" className="w-full">
+                          <SelectValue placeholder="Select vehicle type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="two-wheeler">Two Wheeler</SelectItem>
+                          <SelectItem value="car">Car</SelectItem>
+                          <SelectItem value="bus">Bus</SelectItem>
+                          <SelectItem value="truck">Truck</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="vehicle-number">Vehicle Number</Label>
+                      <Input 
+                        id="vehicle-number"
+                        value={vehicleNumber}
+                        onChange={(e) => setVehicleNumber(e.target.value)}
+                        placeholder="Enter vehicle registration number"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="customer-name">Your Name</Label>
+                      <Input 
+                        id="customer-name"
+                        value={customerName}
+                        onChange={(e) => setCustomerName(e.target.value)}
+                        placeholder="Enter your name"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="customer-phone">Phone Number</Label>
+                      <Input 
+                        id="customer-phone"
+                        value={customerPhone}
+                        onChange={(e) => setCustomerPhone(e.target.value)}
+                        placeholder="Enter your phone number"
+                      />
+                    </div>
+
+                    {selectedToll && (
+                      <div className="bg-gray-50 p-4 rounded-lg">
+                        <div className="flex justify-between items-center">
+                          <span className="text-gray-600">Price:</span>
+                          <span className="text-xl font-semibold text-gray-900">${ticketPrice}</span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  
+                  <div className="mt-8">
+                    <Button 
+                      type="submit" 
+                      className="w-full bg-tollBlue-500 hover:bg-tollBlue-600" 
+                      disabled={isLoading || !selectedToll}
+                    >
+                      {isLoading ? 'Processing...' : 'Book Ticket'}
+                    </Button>
+                  </div>
+                </form>
+              </CardContent>
+            </Card>
+          </div>
+        )}
       </div>
     </div>
   );

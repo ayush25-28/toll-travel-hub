@@ -3,10 +3,10 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import StatsCard from '@/components/ui/StatsCard';
 import { mockStaff, mockCustomers, mockTollGates, mockTickets } from '@/data/mockData';
-import { Users, TicketIcon, MapPin, User, DollarSign } from 'lucide-react';
+import { Users, TicketIcon, MapPin, User, DollarSign, AlertCircle } from 'lucide-react';
 
 const AdminDashboard: React.FC = () => {
-  // Calculate stats
+  // Calculate stats with empty data handling
   const activeStaff = mockStaff.filter(staff => staff.isActive).length;
   const activeGates = mockTollGates.filter(gate => gate.isActive).length;
   const verifiedTickets = mockTickets.filter(ticket => ticket.isVerified).length;
@@ -53,60 +53,70 @@ const AdminDashboard: React.FC = () => {
             <span className="text-sm text-gray-500">{mockTickets.length} total</span>
           </CardHeader>
           <CardContent className="p-0">
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      ID
-                    </th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Vehicle
-                    </th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Type
-                    </th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Date
-                    </th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Amount
-                    </th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Status
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {recentTickets.map((ticket) => (
-                    <tr key={ticket.id}>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        {ticket.id}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {ticket.vehicleNumber}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {ticket.vehicleType.charAt(0).toUpperCase() + ticket.vehicleType.slice(1)}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {new Date(ticket.issueDate).toLocaleDateString()}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        ${ticket.amount}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                          ticket.isVerified ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
-                        }`}>
-                          {ticket.isVerified ? 'Verified' : 'Pending'}
-                        </span>
-                      </td>
+            {recentTickets.length > 0 ? (
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        ID
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Vehicle
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Type
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Date
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Amount
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Status
+                      </th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {recentTickets.map((ticket) => (
+                      <tr key={ticket.id}>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                          {ticket.id}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {ticket.vehicleNumber}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {ticket.vehicleType.charAt(0).toUpperCase() + ticket.vehicleType.slice(1)}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {new Date(ticket.issueDate).toLocaleDateString()}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          ${ticket.amount}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                            ticket.isVerified ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                          }`}>
+                            {ticket.isVerified ? 'Verified' : 'Pending'}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center py-10 text-center">
+                <AlertCircle className="h-12 w-12 text-gray-300 mb-4" />
+                <h3 className="text-lg font-medium text-gray-600">No Tickets Found</h3>
+                <p className="text-gray-500 mt-2">
+                  Ticket data will appear here once database is connected.
+                </p>
+              </div>
+            )}
           </CardContent>
         </Card>
         
@@ -115,29 +125,39 @@ const AdminDashboard: React.FC = () => {
             <CardTitle className="text-gray-800">Gate Performance</CardTitle>
           </CardHeader>
           <CardContent className="pt-6">
-            {mockTollGates.map(gate => (
-              <div key={gate.id} className="mb-4">
-                <div className="flex justify-between mb-1">
-                  <span className="text-sm font-medium text-gray-700">{gate.name}</span>
-                  <span className="text-sm font-medium text-gray-700">
-                    ${mockTickets
-                      .filter(ticket => ticket.tollGateId === gate.id)
-                      .reduce((total, ticket) => total + ticket.amount, 0)}
-                  </span>
+            {mockTollGates.length > 0 ? (
+              mockTollGates.map(gate => (
+                <div key={gate.id} className="mb-4">
+                  <div className="flex justify-between mb-1">
+                    <span className="text-sm font-medium text-gray-700">{gate.name}</span>
+                    <span className="text-sm font-medium text-gray-700">
+                      ${mockTickets
+                        .filter(ticket => ticket.tollGateId === gate.id)
+                        .reduce((total, ticket) => total + ticket.amount, 0)}
+                    </span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2.5">
+                    <div 
+                      className="bg-tollBlue-500 h-2.5 rounded-full" 
+                      style={{ 
+                        width: `${Math.min(
+                          100, 
+                          (mockTickets.filter(ticket => ticket.tollGateId === gate.id).length / Math.max(1, mockTickets.length)) * 100
+                        )}%` 
+                      }}
+                    ></div>
+                  </div>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-2.5">
-                  <div 
-                    className="bg-tollBlue-500 h-2.5 rounded-full" 
-                    style={{ 
-                      width: `${Math.min(
-                        100, 
-                        (mockTickets.filter(ticket => ticket.tollGateId === gate.id).length / mockTickets.length) * 100
-                      )}%` 
-                    }}
-                  ></div>
-                </div>
+              ))
+            ) : (
+              <div className="flex flex-col items-center justify-center py-10 text-center">
+                <MapPin className="h-12 w-12 text-gray-300 mb-4" />
+                <h3 className="text-lg font-medium text-gray-600">No Toll Gates Found</h3>
+                <p className="text-gray-500 mt-2">
+                  Gate performance will appear here once database is connected.
+                </p>
               </div>
-            ))}
+            )}
           </CardContent>
         </Card>
       </div>

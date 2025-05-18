@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { mockTickets, mockCustomers, mockStaff, mockTollGates, ticketStore, TollTicket } from '@/data/mockData';
 import { useToast } from '@/hooks/use-toast';
-import { Search, TicketIcon, CheckCircle2 } from 'lucide-react';
+import { Search, TicketIcon, CheckCircle2, AlertCircle } from 'lucide-react';
 
 const TicketVerification: React.FC = () => {
   const { toast } = useToast();
@@ -101,7 +101,7 @@ const TicketVerification: React.FC = () => {
         </CardContent>
       </Card>
       
-      {searchedTicket && (
+      {searchedTicket ? (
         <Card>
           <CardHeader className={`flex flex-row items-center justify-between p-6 ${
             searchedTicket.isVerified ? 'bg-green-50' : 'bg-yellow-50'
@@ -235,6 +235,17 @@ const TicketVerification: React.FC = () => {
                 </div>
               )}
             </div>
+          </CardContent>
+        </Card>
+      ) : (
+        <Card>
+          <CardContent className="flex flex-col items-center justify-center py-12 text-center">
+            <AlertCircle className="h-16 w-16 text-gray-300 mb-4" />
+            <h3 className="text-xl font-medium text-gray-600 mb-2">No Ticket Selected</h3>
+            <p className="text-gray-500 max-w-md">
+              Enter a ticket ID and click search to verify a ticket. 
+              When connected to a database, you will be able to search and verify tickets.
+            </p>
           </CardContent>
         </Card>
       )}
